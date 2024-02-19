@@ -1,0 +1,4 @@
+seprate login logout navbar 
+
+cast info in MovieInformationDiv
+watchlist button works
