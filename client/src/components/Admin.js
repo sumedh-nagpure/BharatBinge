@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import AccountInformation from "./AccountInformation";
-import Loader from "./Loader";
-import NavbarLogout from "./NavbarLogout";
 import axios from "axios";
-import { withRouter } from "react-router-dom";
-import Watchlist from "./Watchlist";
-import Watched from "./Watched";
-import Likes from "./Likes";
-import Dislikes from "./Dislikes";
 import AdminNavbar from "./AdminNavbar";
 import swal from "sweetalert";
 
@@ -75,7 +67,7 @@ class AdminDashboard extends Component {
   }
   render() {
     return (
-      <div className="bg-slate-950 text-white h-screen ">
+      <div className="bg-slate-950 text-white ">
         <AdminNavbar /> <br />
 
         <div className="overflow-x-auto w-[75vw] ml-[50px]">

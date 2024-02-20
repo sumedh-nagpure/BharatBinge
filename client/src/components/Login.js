@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import NavbarLogout from "./NavbarLogout";
 import logo from "../../src/BB.png";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +35,7 @@ export default function Login() {
       if (response.status === 200) {
         let token = response.data.token;
         localStorage.setItem("moviesToken", token);
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       if (
@@ -65,7 +64,7 @@ export default function Login() {
           <center>
             <img
               onClick={() => {
-                navigate("/");
+                navigate("/register");
               }}
               src={logo}
               className="h-10 text-center block cursor-pointer hover:h-12 duration-100 "

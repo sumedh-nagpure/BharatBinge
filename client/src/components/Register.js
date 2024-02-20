@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import Navbar from "./Navbar";
 import logo from "../../src/BB.png";
 import { useNavigate } from "react-router-dom";
 
@@ -65,13 +64,11 @@ export default function Register() {
       if (response.status === 200) {
         swal(
           "Account Created",
-          "You can now navigate to dashboard",
+          "Login  to access your account.",
           "success"
         ).then((value) => {
           if (value) {
-            let token = response.data.token;
-            localStorage.setItem("moviesToken", token);
-            navigate("/dashboard");
+            navigate("/login");
           }
         });
       }
@@ -104,7 +101,7 @@ export default function Register() {
           <center>
             <img
               onClick={() => {
-                navigate("/");
+                navigate("/login");
               }}
               src={logo}
               className="h-10 text-center block cursor-pointer hover:h-12 duration-100 "

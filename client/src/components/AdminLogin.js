@@ -1,7 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
 import swal from "sweetalert";
-import NavbarLogout from "./NavbarLogout";
 import logo from "../../src/BB.png";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +27,7 @@ export default function Login() {
             return;
         }
         try {
-            if (email === "panel@admin.com" && password === "adminpass") {
+            if (email === "panel@admin.com" && password === "password") {
                 localStorage.setItem("adminLogin", true);
                 navigate("/admin");
             }

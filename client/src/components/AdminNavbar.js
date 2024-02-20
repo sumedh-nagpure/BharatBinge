@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../src/BB.png";
@@ -25,11 +27,7 @@ export default function Navbar() {
         // };
     }, [isNavOpen])
 
-    async function goToDashboard() {
-        document.body.style.overflow = "scroll";
-
-        navigate(`/dashboard`);
-    }
+    
     let navigate = useNavigate();
     return (
 
@@ -38,7 +36,7 @@ export default function Navbar() {
             <img
                 onClick={() => {
                     document.body.style.overflow = "scroll";
-                    navigate(`/`);
+                    navigate(`/admin-login`);
                 }}
                 src={logo}
                 className="cursor-pointer h-10"

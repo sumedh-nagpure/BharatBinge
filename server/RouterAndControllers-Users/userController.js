@@ -1,5 +1,6 @@
 const Users = require("../schemas/UserSchema");
 const jwt = require("jsonwebtoken");
+const sha256 = require("sha256");
 const { ObjectId } = require("mongoose").Types;
 const userController = {
   /////// delete all users from database
@@ -278,7 +279,9 @@ const userController = {
       }
 
       // Check if password matches
-      if (user.password !== password) {
+      console.log(user.password)
+      console.log(sha256(password))
+      if (user.password !== sha256(password)) {
         return res.status(401).json({
           status: false,
           swal_title: "Invalid credentials",
@@ -316,7 +319,9 @@ const userController = {
         });
       }
 
-      const user = new Users({ firstName, lastName, age, email, password });
+      const encryptedpassword = sha256(password)
+      const user = new Users({ firstName, lastName, age, email, password:encryptedpassword });
+      console.log(user);
       await user.save();
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
       res.json({ status: true, message: "User created successfully", token });

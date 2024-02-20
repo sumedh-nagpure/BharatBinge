@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import PopularMovies from "./PopularMovies";
 import UpcomingMovies from "./UpcomingMovies";
-import LatestMovie from "./LatestMovie";
+// import LatestMovie from "./LatestMovie";
 import NowPlaying from "./NowPlaying";
 import Loader from "./Loader";
 import NavbarLogin from "./NavbarLogin";
 import NavbarLogout from "./NavbarLogout";
 import TopRated from "./TopRated";
-import swal from "sweetalert";
-import Recommendations from "./Recommendations";
 
 
 
@@ -20,7 +18,7 @@ export default class componentName extends Component {
     this.state = {
       popular_movies: [],
       upcoming_movies: [],
-      latest_movie: [],
+      // latest_movie: [],    Further update
       loggedin: false,
       now_playing: [],
       top_rated: [],
@@ -96,14 +94,7 @@ export default class componentName extends Component {
       this.setState({ now_playing: response.data.results });
     } catch (error) { }
   };
-  Recommendations = async () => {
-    try {
-      let response = await axios.get(`
-      https://api.themoviedb.org/3/movie/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1`);
 
-      this.setState({ recommendations: response.data.results });
-    } catch (error) { }
-  };
 
 
 
@@ -115,8 +106,7 @@ export default class componentName extends Component {
     this.getTopRatedMovies();
     this.getNowPlaying();
     this.getUpcomingMovies();
-    this.getLatestMovies();
-    this.Recommendations();
+  
 
 
   }
@@ -134,7 +124,7 @@ export default class componentName extends Component {
             <PopularMovies popular_movies={this.state.popular_movies} />
             <TopRated top_rated={this.state.top_rated} />
             <UpcomingMovies upcoming_movies={this.state.upcoming_movies} />
-            <Recommendations recommendations={this.state.upcoming_movies} />
+            
           </div>
         ) : (
           <Loader />
