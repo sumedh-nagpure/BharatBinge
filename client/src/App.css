@@ -55,3 +55,54 @@ input:-webkit-autofill:active{
     transform: rotate(360deg);
   }
 }
+
+.movie-info-container {
+  background-color: #020617; /* Same background color as the homepage */
+  color: #ffffff; /* Text color */
+}
+
+.movie-info-container h1 {
+  color: #ff0000; /* Adjust heading color */
+}
+
+.black-background {
+  background-color: black;
+  color: white;
+}
+
+/* Add this CSS to darken movie poster on hover */
+.hover-effect {
+  position: relative;
+}
+
+.hover-effect:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Adjust opacity as needed */
+}
+
+.hover-effect:hover .text-overlay {
+  visibility: visible;
+}
+
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  visibility: hidden;
+}
+
+.hover-effect {
+  position: relative;
+  width: 300px; /* Adjust width as needed */
+  height: 150px; /* Adjust height as needed */
+  overflow: hidden;
+}
+

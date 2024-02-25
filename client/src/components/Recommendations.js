@@ -22,8 +22,8 @@ const responsive = {
 };
 export default function Recommendations({ recommendations}) {
   return (
-    <div className=" text-start  my-3 mx-0 md:mx-3">
-      <span className="mx-3 md:mx-3 capitalize font-semibold  text-3xl  block ">
+    <div className=" text-start text-white px-3 pt-3 bg-slate-950">
+      <span className="mx-3 md:mx-3 capitalize font-semibold  text-3xl  block">
         recommendations
       </span>
       <span className=" mt-3 block mx-2 md:mx-3  ">

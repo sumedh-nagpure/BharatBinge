@@ -5,9 +5,9 @@ export default function Reviews({reviews}) {
     const [showReviews , setShowReviews] = useState(false)
 
     return (
-        <div className={` text-start my-8    px-3  mx-0 md:mx-3`}>
+        <div className={` text-start text-white bg-slate-950  px-3  mx-0 `}>
         <div className="flex justify-between py-5 items-center duration-500">
-          <span className="capitalize font-semibold  text-3xl md:text-4xl  block">
+          <span className="mx-3 md:mx-3 capitalize font-semibold  text-3xl  block">
             User Reviews 
           </span>
           <span
@@ -29,7 +29,7 @@ export default function Reviews({reviews}) {
               return (
                 <>
                   {" "}
-                  <div className="text-base border-b pb-3  border-gray-900   mt-3 md:mt-8 capitalize  my-3 ">
+                  <div className="text-base border-b pb-3  border-gray-900   mt-3 md:mt-8 capitalize">
                     <span className="block tracking-wider mb-5 leading-relaxed   	">
                       {review.content}
                     </span>

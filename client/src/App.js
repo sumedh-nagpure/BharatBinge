@@ -11,6 +11,7 @@ import Genre from "./components/Genre";
 import Register from "./components/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Start from "./components/Start";
+import MovieTrailerPage from "./components/MovieTrailerPage";
 function App() {
   return (
     <div className="App bg-gray-50 ">
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin-login" element={<AdminLogin/>} />
+          <Route path="/movietrailerpage" element={<MovieTrailerPage/>} />
           {/* <Route path="/" element={<Start />} /> */}
           <Route path="/" element={<Homepage />} />
           <Route path="/movie/:id" element={<Movie />} />

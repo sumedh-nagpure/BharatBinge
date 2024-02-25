@@ -1,53 +1,25 @@
-import React from "react";
-import swal from "sweetalert";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ThumbsUp } from "@phosphor-icons/react";
-import { ThumbsDown } from "@phosphor-icons/react";
-import { BookmarkSimple } from "@phosphor-icons/react";
-import { BsBookmark } from "react-icons/bs";
-import { useState, useEffect } from "react";
+import swal from "sweetalert";
+import { ThumbsUp, ThumbsDown, BookmarkSimple,Play } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+
 export default function MovieInformationDiv({ movie, provider }) {
-  let navigate = useNavigate();
-  let { id } = useParams();
-  const [user, setuser] = useState([]);
-  const [loggedin, setloggedin] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [user, setUser] = useState([]);
   const [optionAmongFour, setOptionAmongFour] = useState("overview");
   const [watchMode, setWatchMode] = useState("rent");
   const [likedID, setLikedID] = useState([]);
   const [dislikedID, setDislikedID] = useState([]);
-  const containsNumber = (arr, num) => {
-    return arr.includes(num);
-  };
 
   useEffect(() => {
     getUserInformation();
   }, []);
 
-  // function updateDislikedID(user) {
-  //   let dislikes = user.dislikes;
-  //   if (dislikes.length > 0) {
-  //     let current = [];
-  //     dislikes.map((dislikes, index) => {
-  //       current.push(dislikes.originalId);
-  //     });
-  //     setDislikedID(current);
-  //   }
-  // }
-  // function updateLikedID(user) {
-  //   let likes = user.likes;
-  //   if (likes.length > 0) {
-  //     let current = [];
-  //     likes.map((like, index) => {
-  //       current.push(like.originalId);
-  //     });
-  //     setLikedID(current);
-  //   } else {
-  //   }
-  // }
   async function getUserInformation() {
     try {
-      let response = await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/users/individual",
         {},
         {
@@ -57,32 +29,23 @@ export default function MovieInformationDiv({ movie, provider }) {
         }
       );
 
-      setuser([]);
-
-      let results = response.data.user;
-
-      // currentuser.push(results);
-
-      setuser(results);
-
-      // updateLikedID(results);
-      // this.setState({ provider: results[Object.keys(results)[0]] });
-    } catch (error) { }
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching user information:", error);
+    }
   }
-  // let inwatchlist =
-  //   user && user[0].watchlist.some((item) => item.originalId === parseInt(id));
 
   async function updateLikes() {
     try {
-      let token = localStorage.getItem("moviesToken");
-      let url = "http://localhost:8000/users/updateLikes";
-      let tmovie = {
+      const token = localStorage.getItem("moviesToken");
+      const url = "http://localhost:8000/users/updateLikes";
+      const tmovie = {
         movieName: movie.original_title,
         movieRating: movie.vote_average,
         movieBackdropPath: movie.backdrop_path,
         originalId: id,
       };
-      let response = await axios.post(
+      const response = await axios.post(
         url,
         { movie: tmovie },
         {
@@ -91,37 +54,26 @@ export default function MovieInformationDiv({ movie, provider }) {
           },
         }
       );
-      if (response) {
-        if (response.status === 200) {
-          swal("Success", response.data.message, "success");
-          getUserInformation();
-        }
+      if (response.status === 200) {
+        swal("Success", response.data.message, "success");
+        getUserInformation();
       }
     } catch (error) {
-      swal({
-        title: "Login needed",
-        text: "You must be logged in for this . Go to Login ? ",
-        icon: "error",
-        buttons: true,
-        dangerMode: false,
-      }).then((yes) => {
-        if (yes) {
-          navigate("/login");
-        }
-      });
+      handleLoginRequired();
     }
   }
+
   async function updateDislikes() {
     try {
-      let token = localStorage.getItem("moviesToken");
-      let url = "http://localhost:8000/users/updateDislikes";
-      let tmovie = {
+      const token = localStorage.getItem("moviesToken");
+      const url = "http://localhost:8000/users/updateDislikes";
+      const tmovie = {
         movieName: movie.original_title,
         movieRating: movie.vote_average,
         movieBackdropPath: movie.backdrop_path,
         originalId: id,
       };
-      let response = await axios.post(
+      const response = await axios.post(
         url,
         { movie: tmovie },
         {
@@ -130,37 +82,26 @@ export default function MovieInformationDiv({ movie, provider }) {
           },
         }
       );
-      if (response) {
-        if (response.status === 200) {
-          swal("Success", response.data.message, "success");
-          getUserInformation();
-        }
+      if (response.status === 200) {
+        swal("Success", response.data.message, "success");
+        getUserInformation();
       }
     } catch (error) {
-      swal({
-        title: "Login needed",
-        text: "You must be logged in for this . Go to Login ? ",
-        icon: "error",
-        buttons: true,
-        dangerMode: false,
-      }).then((yes) => {
-        if (yes) {
-          navigate("/login");
-        }
-      });
+      handleLoginRequired();
     }
   }
+
   async function updateWatchlist() {
     try {
-      let token = localStorage.getItem("moviesToken");
-      let url = "http://localhost:8000/users/updateWatchlist";
-      let tmovie = {
+      const token = localStorage.getItem("moviesToken");
+      const url = "http://localhost:8000/users/updateWatchlist";
+      const tmovie = {
         movieName: movie.original_title,
         movieRating: movie.vote_average,
         movieBackdropPath: movie.backdrop_path,
         originalId: id,
       };
-      let response = await axios.post(
+      const response = await axios.post(
         url,
         { movie: tmovie },
         {
@@ -169,228 +110,180 @@ export default function MovieInformationDiv({ movie, provider }) {
           },
         }
       );
-      if (response) {
-        if (response.status === 200) {
-          swal("Success", response.data.message, "success");
-          getUserInformation();
-        }
+      if (response.status === 200) {
+        swal("Success", response.data.message, "success");
+        getUserInformation();
       }
     } catch (error) {
-      swal({
-        title: "Login needed",
-        text: "You must be logged in for this . Go to Login ? ",
-        icon: "error",
-        buttons: true,
-        dangerMode: false,
-      }).then((yes) => {
-        if (yes) {
-          navigate("/login");
-        }
-      });
+      handleLoginRequired();
     }
   }
+
+  const handleLoginRequired = () => {
+    swal({
+      title: "Login needed",
+      text: "You must be logged in for this. Go to Login?",
+      icon: "error",
+      buttons: true,
+      dangerMode: false,
+    }).then((yes) => {
+      if (yes) {
+        navigate("/login");
+      }
+    });
+  };
 
   const handleSelectChange = (event) => {
     setWatchMode(event.target.value);
   };
 
   return (
-    <div className="  px-2 lg:px-8 ">
-      <div className=" mt-3 mb-5 text-start  ">
-        <span className="text-3xl md:text-5xl   font-sans font-semibold block ">
+    <div className="movie-info-container px-2 lg:px-8" style={{ height: "700px", overflowY: "auto" }}>
+      <div className="mt-0 mb-5 text-start">
+        <h1 className="text-3xl py-3 md:text-5xl font-sans font-semibold">
           {movie.original_title}
-        </span>
-        <span className="font-sans text-lg mt-3 text-gray-500 block ">
+        </h1>
+        <span className="font-sans text-lg mt-3 text-gray-500 block">
           {movie.tagline}
         </span>
       </div>
-      <div className="text-start my-3 ">
-        <span
-          onClick={() => {
-            updateLikes();
-          }}
-          className="text-5xl   rounded-full  filled hover:scale-105 duration-100 cursor-pointer inline-block "
+      <div className="text-start my-3">
+      <span
+          onClick={updateLikes}
+          className="text-5xl filled hover:scale-105 duration-100 cursor-pointer inline-block"
         >
           {user &&
             user.likes &&
             user.likes.some((object) => object.originalId === parseInt(id)) ? (
-            <span className="text-pink-500 ">
-              {" "}
-              <ThumbsUp size={40} color="#0a0a0a" weight="fill" />
-            </span>
+            <Play size={40} color="#F00000" weight="duotone" />
           ) : (
-            <span className="text-pink-500">
-              {" "}
-              <ThumbsUp size={40} color="#0a0a0a" />
-            </span>
+            <Play size={40} color="#E6E6E6" />
           )}
         </span>
         <span
-          onClick={() => {
-            updateDislikes();
-          }}
-          className="text-5xl mx-5 text-black hover:scale-105 duration-100 cursor-pointer inline-block "
+          onClick={updateLikes}
+          className="text-5xl ml-5 filled hover:scale-105 duration-100 cursor-pointer inline-block"
         >
-
+          {user &&
+            user.likes &&
+            user.likes.some((object) => object.originalId === parseInt(id)) ? (
+            <ThumbsUp size={40} color="#F00000" weight="duotone" />
+          ) : (
+            <ThumbsUp size={40} color="#E6E6E6" />
+          )}
+        </span>
+        <span
+          onClick={updateDislikes}
+          className="text-5xl mx-5 text-black hover:scale-105 duration-100 cursor-pointer inline-block"
+        >
           {user &&
             user.dislikes &&
             user.dislikes.some((obj) => obj.originalId === parseInt(id)) ? (
-            <span className="text-black-500">
-              <ThumbsDown size={40} color="#0a0a0a" weight="fill" />
-            </span>
+            <ThumbsDown size={40} color="#F00000" weight="duotone" />
           ) : (
-            <span className="text-black-500">
-              <ThumbsDown size={40} color="#0a0a0a" />
-            </span>
+            <ThumbsDown size={40} color="#E6E6E6" />
           )}
         </span>
         <span
-          onClick={() => {
-            updateWatchlist();
-          }}
-          className={`hover:scale-105 duration-100 cursor-pointer inline-block   text-5xl   `}
+          onClick={updateWatchlist}
+          className="hover:scale-105 duration-100 cursor-pointer inline-block text-5xl"
         >
           {user &&
             user.watchlist &&
             user.watchlist.some((obj) => obj.originalId === parseInt(id)) ? (
-            <span className="text-cyan-500">
-              <BookmarkSimple size={40} color="#0a0a0a" weight="fill" />
-            </span>
+            <BookmarkSimple size={40} color="#F00000" weight="duotone" />
           ) : (
-            <span className="text-cyan-500">
-              <BookmarkSimple size={40} color="#0a0a0a" />
-            </span>
+            <BookmarkSimple size={40} color="#E6E6E6" />
           )}
-
         </span>
       </div>
       <div>
         <div className="flex justify-start">
           <span
-            onClick={() => {
-              setOptionAmongFour("overview");
-            }}
-            className={` my-3 font-semibold  mr-2 capitalize text-base md:text-2xl   duration-500 cursor-pointer ${optionAmongFour === "overview" && "border-b-2 pb-1 border-red-600"
-              } `}
+            onClick={() => setOptionAmongFour("overview")}
+            className={`my-3 font-semibold mr-2 capitalize text-base md:text-2xl duration-500 cursor-pointer ${optionAmongFour === "overview" && "border-b-2 pb-1 border-red-600"
+              }`}
           >
             Overview
           </span>
           <span
-            onClick={() => {
-              setOptionAmongFour("cast");
-            }}
-            className={` my-3 mx-2 font-semibold md:mx-5 capitalize  text-base md:text-2xl   duration-500 cursor-pointer ${optionAmongFour === "cast" && "border-b-2 pb-1 border-red-600"
-              } `}
+            onClick={() => setOptionAmongFour("cast")}
+            className={`my-3 mx-2 font-semibold md:mx-5 capitalize text-base md:text-2xl duration-500 cursor-pointer ${optionAmongFour === "cast" && "border-b-2 pb-1 border-red-600"
+              }`}
           >
-            cast
+            Cast
           </span>
           <span
-            onClick={() => {
-              setOptionAmongFour("moreinfo");
-            }}
-            className={`my-3  ${optionAmongFour === "moreinfo" && "border-b-2 pb-1 border-red-600"
-              } mx-2 md:mx-5 capitalize  text-base md:text-2xl   duration-500 cursor-pointer font-semibold`}
+            onClick={() => setOptionAmongFour("moreinfo")}
+            className={`my-3 ${optionAmongFour === "moreinfo" &&
+              "border-b-2 pb-1 border-red-600"} mx-2 md:mx-5 capitalize text-base md:text-2xl duration-500 cursor-pointer font-semibold`}
           >
-            more info
+            More Info
           </span>
           <span
-            onClick={() => {
-              setOptionAmongFour("wheretowatch");
-            }}
-            className={`my-3     ${optionAmongFour === "wheretowatch" &&
-              "border-b-2 pb-1 border-red-600"
-              }   mx-2 md:mx-5 capitalize  text-base md:text-2xl   duration-500 cursor-pointer font-semibold`}
+            onClick={() => setOptionAmongFour("wheretowatch")}
+            className={`my-3 ${optionAmongFour === "wheretowatch" &&
+              "border-b-2 pb-1 border-red-600"} mx-2 md:mx-5 capitalize text-base md:text-2xl duration-500 cursor-pointer font-semibold`}
           >
-            where to watch{" "}
+            Where to Watch
           </span>
         </div>
-        <div className="text-start ">
-          {optionAmongFour === "wheretowatch" &&
-            (provider.hasOwnProperty("rent") ||
-              provider.hasOwnProperty("buy") ? (
-              <div className=" pt-5 duration-5000  grid grid-cols-5 ">
-                <div className="col-span-2 ">
-                  <span className="block mb-3 text-2xl capitalize ">
-                    select mode
-                  </span>
-                  <select
-                    className=" px-2 py-1  text-lg border rounded "
-                    value={watchMode}
-                    onChange={handleSelectChange}
-                  >
-                    <option value="rent">Rent</option>
-                    <option value="buy">Buy</option>
-                  </select>
-                </div>
-                <div className="  col-span-3  w-full ">
-                  <span className="block  text-2xl  capitalize  ">
-                    {watchMode} options{" "}
-                  </span>
-                  {console.log("provdier : ", provider)}
-                  {provider !== undefined ? <div className="py-3 inline-block  w-full  grid grid-cols-3">
+        <div className="text-start">
+          {optionAmongFour === "wheretowatch" && (
+            <div className="pt-5 duration-5000 grid grid-cols-5">
+              <div className="col-span-2">
+                <span className="block mb-3 text-2xl capitalize">
+                  Select mode
+                </span>
+                <select
+                  className="px-2 py-1 text-lg border rounded bg-slate-950"
+                  value={watchMode}
+                  onChange={handleSelectChange}
+                >
+                  <option value="rent">Rent</option>
+                  <option value="buy">Buy</option>
+                </select>
+              </div>
+              <div className="col-span-3 w-full">
+                <span className="block text-2xl capitalize">
+                  {watchMode} options
+                </span>
+                {provider !== undefined ? (
+                  <div className="py-3 inline-block w-full grid grid-cols-3">
                     {(provider.hasOwnProperty("rent") ||
                       provider.hasOwnProperty("buy")) &&
                       provider.hasOwnProperty(watchMode) &&
-                      provider[watchMode].map((name, index) => {
-                        return (
-                          <div
-                            className={` my-3 inline-block cursor-pointer hover:scale-105 duration-300    ${index % 3 !== 0 && "mx-6 "
+                      provider[watchMode].map((name, index) => (
+                        <div
+                          key={index}
+                          className={`my-3 inline-block cursor-pointer hover:scale-105 duration-300 ${index % 3 !== 0 && "mx-6"
+                            }`}
+                        >
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={`https://image.tmdb.org/t/p/original${name && name.logo_path
                               }`}
-                          >
-                            <img
-                              className=" h-8  w-8 rounded-full"
-                              src={`https://image.tmdb.org/t/p/original${name && name.logo_path
-                                }`}
-                            />
-                            <span className="text-sm text-gray-500 mt-2 block duration-100">
-                              {name.provider_name}
-                            </span>
-                          </div>
-                        );
-                      })}
-                  </div> : "hull"}
-                </div>
-              </div>
-            ) : (
-              <div>
-                {provider.hasOwnProperty("flatrate") && (
-                  <div className="grid grid-cols-3 ">
-                    {" "}
-                    <div className="col-span-1 text-xl font-semibold ">
-                      Flatrate{" "}
-                    </div>
-                    <div className="py-3 inline-block  w-full  grid grid-cols-3">
-                      {provider !== undefined ? <div className="py-3 inline-block  w-full  grid grid-cols-3">
-                        {provider.hasOwnProperty("flatrate") &&
-                          provider.flatrate.map((name, index) => {
-                            console.log("flat rate index ; ", index);
-                            return (
-                              <div
-                                className={` my-3 inline-block cursor-pointer hover:scale-105 duration-300    ${index % 3 !== 0 && "mx-6 "
-                                  }`}
-                              >
-                                <img
-                                  className=" h-8  w-8 rounded-full"
-                                  src={`https://image.tmdb.org/t/p/original${name && name.logo_path
-                                    }`}
-                                />
-                                <span className="text-sm text-gray-500 mt-2 block duration-100">
-                                  {name.provider_name}
-                                </span>
-                              </div>
-                            );
-                          })}
-                      </div> : "nothing to show"}
-                    </div>
+                            alt="provider-logo"
+                          />
+                          <span className="text-sm text-gray-500 mt-2 block duration-100">
+                            {name.provider_name}
+                          </span>
+                        </div>
+                      ))}
                   </div>
+                ) : (
+                  "No providers available"
                 )}
               </div>
-            ))}
-          {optionAmongFour === "cast" && <div className="px-5 my-5">Cast</div>}
+            </div>
+          )}
+          {optionAmongFour === "cast" && (
+            <div className="px-5 my-5">Cast information goes here</div>
+          )}
           {optionAmongFour === "moreinfo" && (
-            <div className=" ">
+            <div className="">
               {movie.adult && (
-                <span className=" block text-white bg-red-500 inline-block  px-3  py-1 rounded-full">
+                <span className="block text-white bg-red-500 inline-block px-3 py-1 rounded-full">
                   Adult Content
                 </span>
               )}
@@ -399,31 +292,29 @@ export default function MovieInformationDiv({ movie, provider }) {
                   Production Company
                 </span>
                 <div className="grid grid-cols-3">
-                  {movie.production_companies.map((company, index) => {
-                    return (
-                      <span
-                        className={`block col-span-1 my-1 py-1 px-3 inline-block mx-1 text-sm  duration-300 text-gray-500 cursor-pointer  hover:scale-105 border border-gray-200`}
-                      >
-                        {company.name}
-                      </span>
-                    );
-                  })}
+                  {movie.production_companies.map((company, index) => (
+                    <span
+                      key={index}
+                      className={`block col-span-1 my-1 py-1 px-3 inline-block mx-1 text-sm duration-300 text-gray-500 cursor-pointer hover:scale-105 border border-gray-200`}
+                    >
+                      {company.name}
+                    </span>
+                  ))}
                 </div>
               </div>
               <div className="mt-3">
                 <span className="block text-lg font-bold mb-1 capitalize">
                   Production Country
                 </span>
-                {movie.production_countries.map((country, index) => {
-                  return (
-                    <span
-                      className={`block py-1 px-3 inline-block ${index >= 1 && "mx-2 "
-                        }  duration-300 text-gray-500 cursor-pointer  hover:scale-105 border border-gray-200`}
-                    >
-                      {country.name}
-                    </span>
-                  );
-                })}
+                {movie.production_countries.map((country, index) => (
+                  <span
+                    key={index}
+                    className={`block py-1 px-3 inline-block ${index >= 1 && "mx-2"
+                      } duration-300 text-gray-500 cursor-pointer hover:scale-105 border border-gray-200`}
+                  >
+                    {country.name}
+                  </span>
+                ))}
               </div>
               <div className="mt-3">
                 <span className="block text-lg font-bold mb-1 capitalize">
@@ -436,52 +327,42 @@ export default function MovieInformationDiv({ movie, provider }) {
             </div>
           )}
           {optionAmongFour === "overview" && (
-            <div className=" my-5">
+            <div className="my-5">
               <div>
                 <span className="block text-lg font-bold mb-1 ">Genre</span>
-                {movie.genres?.map((genre, index) => {
-                  return (
-                    <span
-                      onClick={() => {
-                        navigate(`/movies/genre/${genre.id}`);
-                      }}
-                      className={`inline-block py-1 px-3 duration-300 text-gray-500 cursor-pointer  hover:scale-105 border border-gray-200 ${index >= 1 ? "mx-2" : ""
-                        }`}
-                    >
-                      {genre.name}
-                    </span>
-                  );
-                })}
+                {movie.genres?.map((genre, index) => (
+                  <span
+                    key={index}
+                    onClick={() => {
+                      navigate(`/movies/genre/${genre.id}`);
+                    }}
+                    className={`inline-block py-1 px-3 duration-300 text-gray-500 cursor-pointer hover:scale-105 border border-gray-200 ${index >= 1 ? "mx-2" : ""
+                      }`}
+                  >
+                    {genre.name}
+                  </span>
+                ))}
               </div>
               <div className="mt-3">
                 <span className="block text-lg font-bold mb-1 ">Plot</span>
-
-                <span
-                  className={`inline-block py-1  duration-300 text-gray-600 `}
-                >
+                <span className={`inline-block py-1 duration-300 text-gray-600`}>
                   {movie.overview}
                 </span>
               </div>
               <div className="grid grid-cols-3 mt-3">
                 <div className="mt-3">
                   <span className="block text-lg font-bold mb-1  capitalize ">
-                    runtime
+                    Runtime
                   </span>
-
-                  <span
-                    className={`inline-block py-1  duration-300 text-gray-500 cursor-pointer  hover:scale-105 `}
-                  >
+                  <span className={`inline-block py-1 duration-300 text-gray-500`}>
                     {movie.runtime} min
                   </span>
                 </div>
                 <div className="mt-3">
                   <span className="block text-lg font-bold mb-1  capitalize ">
-                    rating
+                    Rating
                   </span>
-
-                  <span
-                    className={`inline-block py-1  duration-300 text-gray-500 cursor-pointer  hover:scale-105 `}
-                  >
+                  <span className={`inline-block py-1 duration-300 text-gray-500`}>
                     {movie.vote_average}
                   </span>
                 </div>
@@ -489,10 +370,7 @@ export default function MovieInformationDiv({ movie, provider }) {
                   <span className="block text-lg font-bold mb-1  capitalize ">
                     Release Year
                   </span>
-
-                  <span
-                    className={`inline-block py-1  duration-300 text-gray-500 cursor-pointer  hover:scale-105 `}
-                  >
+                  <span className={`inline-block py-1 duration-300 text-gray-500`}>
                     {movie.release_date}
                   </span>
                 </div>

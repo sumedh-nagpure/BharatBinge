@@ -1,7 +1,34 @@
 const Users = require("../schemas/UserSchema");
 const jwt = require("jsonwebtoken");
-const sha256 = require("sha256");
 const { ObjectId } = require("mongoose").Types;
+
+
+const validateEmail = (email) => {
+  // Simple email validation regex
+  const emailRegex = /^[a-zA-Z0-9._%+-]{2,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+};
+
+const validatePassword = (password) => {
+  // Password should be at least 4 characters long
+  return password.length >= 4;
+};
+
+const validateName = (name, fieldName) => {
+  // Name should be at least 3 characters long
+  if (name.length < 3) {
+    throw new Error(`${fieldName} should be at least 3 characters long.`);
+  }
+  return true;
+};
+
+const validateAge = (age) => {
+  // Age should be greater than 10 and less than 100
+  if (age <= 10 || age >= 100) {
+    throw new Error("Age should be greater than 10 and less than 100.");
+  }
+  return true;
+};
 const userController = {
   /////// delete all users from database
   deleteAllUsers: (req, res) => {
@@ -39,7 +66,7 @@ const userController = {
       req.userData = { userId: decodedToken.userId, email: decodedToken.email };
       next();
     } catch (err) {
-     console.log("error: " , err)
+      console.log("error: ", err)
       return res.status(401).json({ message: "Invalid token" });
     }
   },
@@ -208,21 +235,21 @@ const userController = {
       console.log("authHeader : ", authHeader)
       if (!authHeader || authHeader === null) {
         // If authorization header is missing, return false
-        return res.json({ verified: false  , message :"auth header missing"});
+        return res.json({ verified: false, message: "auth header missing" });
       }
-  
+
       const token = authHeader.split(' ')[1];
-      if (!token  || token === null) {
+      if (!token || token === null) {
         // If token is missing or null, return false
-        return res.json({ verified: false , message :"token header missing" });
+        return res.json({ verified: false, message: "token header missing" });
       }
-  
+
       // Verify the token
       console.log("token :", token)
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       if (!decoded) {
         // If token verification fails, return false
-        return res.json({ verified: false , message :"DECODED NOT VERIFIED" });
+        return res.json({ verified: false, message: "DECODED NOT VERIFIED" });
       } else {
         // If token verification succeeds, return true
         return res.json({ verified: true });
@@ -245,7 +272,7 @@ const userController = {
   ////////// get a individual user
   getUserById: async (req, res) => {
     try {
-     
+
       const user = await Users.findById(req.userData.userId);
       if (!user) {
         return res
@@ -268,6 +295,22 @@ const userController = {
           .status(400)
           .json({ message: "Please provide email and password" });
       }
+      try {
+        console.log("here")
+
+        if (!validateEmail(email)) {
+          throw new Error("Invalid email format.");
+        }
+        if (!validatePassword(password)) {
+          throw new Error("Password should be at least 4 characters long.");
+        }
+      } catch (validationError) {
+        return res.status(400).json({
+          status: false,
+          swal_title: "Invalid Input",
+          swal_message: validationError.message,
+        });
+      }
       // Check if user exists
       const user = await Users.findOne({ email });
       if (!user) {
@@ -279,9 +322,7 @@ const userController = {
       }
 
       // Check if password matches
-      console.log(user.password)
-      console.log(sha256(password))
-      if (user.password !== sha256(password)) {
+      if (user.password !== password) {
         return res.status(401).json({
           status: false,
           swal_title: "Invalid credentials",
@@ -303,10 +344,30 @@ const userController = {
     }
   },
 
-  ///////////Create a user
+
+
   createUser: async (req, res) => {
     try {
       const { firstName, lastName, age, email, password } = req.body;
+
+      // Validate input fields
+      try {
+        validateName(firstName, "First name");
+        validateName(lastName, "Last name");
+        validateAge(age);
+        if (!validateEmail(email)) {
+          throw new Error("Invalid email format.");
+        }
+        if (!validatePassword(password)) {
+          throw new Error("Password should be at least 4 characters long.");
+        }
+      } catch (validationError) {
+        return res.status(400).json({
+          status: false,
+          swal_title: "Invalid Input",
+          swal_message: validationError.message,
+        });
+      }
 
       // Check if user already exists
       const existingUser = await Users.findOne({ email });
@@ -314,14 +375,11 @@ const userController = {
         return res.status(400).json({
           status: false,
           swal_title: "User exists already",
-          swal_message:
-            "User with this email already exists. Try with a different email , or try logging in",
+          swal_message: "User with this email already exists. Try with a different email, or try logging in",
         });
       }
 
-      const encryptedpassword = sha256(password)
-      const user = new Users({ firstName, lastName, age, email, password:encryptedpassword });
-      console.log(user);
+      const user = new Users({ firstName, lastName, age, email, password });
       await user.save();
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
       res.json({ status: true, message: "User created successfully", token });
@@ -335,8 +393,9 @@ const userController = {
     }
   },
 
+
   ///////////////////////// update a user
-  updateUser: (req, res) => {},
+  updateUser: (req, res) => { },
 
   ////////////////// Delete a user
   deleteUser: async (req, res) => {
