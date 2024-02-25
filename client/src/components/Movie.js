@@ -46,6 +46,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Recommendations from "./Recommendations";
+import MovieVideoDiv from "./MovieVideoDiv";
 import Reviews from "./Reviews";
 import NavbarLogout from "./NavbarLogout";
 import NavbarLogin from "./NavbarLogin";
@@ -153,6 +154,9 @@ export default class componentName extends Component {
             <div className="grid grid-cols-5 ">
               <div className="col-span-5 lg:col-span-2">
                 {" "}
+                {/* <MovieVideoDiv
+                  backdrop_path={this.state.movie.backdrop_path}
+                /> */}
                 <MoviePosterDiv
                   backdrop_path={this.state.movie.backdrop_path}
                 />

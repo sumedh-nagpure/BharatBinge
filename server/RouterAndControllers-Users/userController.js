@@ -16,16 +16,16 @@ const validatePassword = (password) => {
 
 const validateName = (name, fieldName) => {
   // Name should be at least 3 characters long
-  if (name.length < 3) {
-    throw new Error(`${fieldName} should be at least 3 characters long.`);
+  if (name.length < 2) {
+    throw new Error(`${fieldName} should be at least 2 characters long.`);
   }
   return true;
 };
 
 const validateAge = (age) => {
   // Age should be greater than 10 and less than 100
-  if (age <= 10 || age >= 100) {
-    throw new Error("Age should be greater than 10 and less than 100.");
+  if (age <= 10 || age >= 150) {
+    throw new Error("Age should be greater than 10 and less than 150.");
   }
   return true;
 };

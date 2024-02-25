@@ -36,7 +36,7 @@ export default function Recommendations({ recommendations}) {
             return (
               <>
               <div
-                className={` h-72 hover:brightness-75 mx-0 md:mx-1 border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${
+                className={` h-48 hover:brightness-75 mx-0 md:mx-1 border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${
                   reco && reco.backdrop_path
                 })]  `}
                 onClick={() => {

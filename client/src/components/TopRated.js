@@ -33,13 +33,13 @@ function TopRated({ top_rated }) {
         <span className=" mt-3 block mx-2 md:mx-3  ">
           {/* Movies similar to - {title} */}
         </span>
-        <div className="py-3     ">
+        <div className="">
           <Carousel responsive={responsive}>
             {top_rated.map((reco, index) => {
               return (
                 <>
                   <div
-                    className={` h-72 hover:brightness-75 mx-2  border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path
+                    className={` h-48 hover:brightness-75 mx-2  border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path
                       })]  `}
                     onClick={() => {
 

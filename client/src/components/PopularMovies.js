@@ -1,9 +1,9 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+
 const responsive = {
   superLargeDesktop: {
-    // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
     items: 5,
   },
@@ -24,37 +24,32 @@ const responsive = {
 function PopularMovies({ popular_movies }) {
   return (
     <>
-      <div className=" text-start  my-5 mx-5 ">
-        <span className="mx-3 md:mx-3 capitalize font-semibold  text-3xl  block ">
+      <div className="text-start my-5 mx-5">
+        <span className="mx-3 md:mx-3 capitalize font-semibold text-3xl block">
           Popular Movies
         </span>
-        <span className=" mt-3 block mx-2 md:mx-3  ">
+        <span className="mt-3 block mx-2 md:mx-3">
           {/* Movies similar to - {title} */}
         </span>
-        <div className="py-3     ">
+        <div className="">
           <Carousel responsive={responsive}>
             {popular_movies.map((reco, index) => {
               return (
-                <>
+                <div key={index}>
                   <div
-                    className={` h-72 hover:brightness-75 mx-2  border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path
-                      })]  `}
+                    className={`h-48 hover:brightness-75 mx-2 border bg-cover cursor-pointer duration-100 bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path})]`}
                     onClick={() => {
-
                       window.location.href = `http://localhost:3000/movie/${reco.id}`;
-                      // navigate(`/movie/${reco.id}`);
                     }}
                   ></div>
-                  <div className="flex  justify-between px-2 mt-2 font-semibold text-white ">
+                  <div className="flex justify-between px-2 mt-2 font-semibold text-white">
                     <span className="text-xl px-2 py-1 rounded hover:text-black hover:bg-red-600">
                       {reco.original_title}
                     </span>
                   </div>
-                </>
-
+                </div>
               );
             })}
-
           </Carousel>
         </div>
       </div>

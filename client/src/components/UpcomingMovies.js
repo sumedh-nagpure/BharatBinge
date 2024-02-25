@@ -40,7 +40,7 @@ function UpcomingMovies({ upcoming_movies }) {
               return (
                 <>
                 <div
-                  className={` h-72 hover:brightness-75 mx-2  border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path
+                  className={` h-48 hover:brightness-75 mx-2  border  bg-cover cursor-pointer  duration-100  bg-center bg-no-repeat rounded shadow-lg bg-[url(https://image.tmdb.org/t/p/original${reco && reco.backdrop_path
                     })]  `}
                   onClick={() => {
 
