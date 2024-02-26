@@ -2,6 +2,7 @@ const Users = require("../schemas/UserSchema");
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongoose").Types;
 
+const crypto = require('crypto');
 
 const validateEmail = (email) => {
   // Simple email validation regex
@@ -288,7 +289,7 @@ const userController = {
   ////// user login Login user
   loginUser: async (req, res) => {
     try {
-      const { email, password } = req.body;
+      var { email, password } = req.body;
 
       if (!email || !password) {
         return res
@@ -321,6 +322,8 @@ const userController = {
         });
       }
 
+      password = crypto.createHash('sha256').update(password).digest('hex');
+
       // Check if password matches
       if (user.password !== password) {
         return res.status(401).json({
@@ -348,7 +351,7 @@ const userController = {
 
   createUser: async (req, res) => {
     try {
-      const { firstName, lastName, age, email, password } = req.body;
+      var { firstName, lastName, age, email, password } = req.body;
 
       // Validate input fields
       try {
@@ -378,6 +381,9 @@ const userController = {
           swal_message: "User with this email already exists. Try with a different email, or try logging in",
         });
       }
+
+       password = crypto.createHash('sha256').update(password).digest('hex');
+
 
       const user = new Users({ firstName, lastName, age, email, password });
       await user.save();
