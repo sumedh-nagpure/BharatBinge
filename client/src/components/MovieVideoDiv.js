@@ -1,7 +1,4 @@
-
-
-
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 export default function MovieVideoDiv() {
 
 
@@ -9,9 +6,6 @@ export default function MovieVideoDiv() {
     useEffect(() => {
         const video = videoRef.current;
         video.loop = true;
-        // video.play().catch(error => {
-        //     console.error('Video playback error:', error);
-        // });
     }, []);
 
 
