@@ -16,20 +16,21 @@ const validatePassword = (password) => {
 };
 
 const validateName = (name, fieldName) => {
-  // Name should be at least 3 characters long
-  if (name.length < 2) {
-    throw new Error(`${fieldName} should be at least 2 characters long.`);
+  // Name should be at least 2 characters long and should not contain only spaces
+  if (name.trim().length < 3) {
+    throw new Error(`${fieldName} should be at least 3 characters long and should not contain only spaces.`);
   }
   return true;
 };
 
 const validateAge = (age) => {
-  // Age should be greater than 10 and less than 100
+  // Age should be greater than 10 and less than 150
   if (age <= 10 || age >= 150) {
     throw new Error("Age should be greater than 10 and less than 150.");
   }
   return true;
 };
+
 const userController = {
   /////// delete all users from database
   deleteAllUsers: (req, res) => {
@@ -420,15 +421,3 @@ const userController = {
 };
 
 module.exports = userController;
-
-// things to do tommorow
-
-// make a watchlist function
-
-// jwt token after login , registration expires after 10 h
-// global token variable in postman
-
-//FRONTEND
-// after user register , valid token in localStorage.
-// relevant information in user Dashboard works
-// add options - watchlist , like , dislike to the frontend (while applying appropriate conditioning)
