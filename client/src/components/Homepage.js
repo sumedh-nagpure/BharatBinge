@@ -96,10 +96,6 @@ export default class componentName extends Component {
   };
 
 
-
-
-
-
   componentDidMount() {
     this.verifyLogin();
     this.getPopularMovies();
