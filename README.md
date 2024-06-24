@@ -1,6 +1,4 @@
-Here's a more innovative version without AI, ML, CI/CD, and hosting references:
 
-```markdown
 # 🎬 BharatBinge: Unleash the Cinema Buff in You!
 
 Welcome to BharatBinge - where every frame tells a story, and every story finds its perfect audience. Dive into a world where your passion for cinema meets cutting-edge technology!
